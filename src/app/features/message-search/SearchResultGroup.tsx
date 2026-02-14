@@ -5,6 +5,7 @@ import { HTMLReactParserOptions } from 'html-react-parser';
 import { Avatar, Box, Chip, Header, Icon, Icons, Text, config } from 'folds';
 import { Opts as LinkifyOpts } from 'linkifyjs';
 import { useMatrixClient } from '../../hooks/useMatrixClient';
+import { useRoomUrlPreview } from '../../hooks/useRoomUrlPreview';
 import {
   factoryRenderLinkifyWithMention,
   getReactCustomHtmlParser,
@@ -57,7 +58,6 @@ type SearchResultGroupProps = {
   highlights: string[];
   items: ResultItem[];
   mediaAutoLoad?: boolean;
-  urlPreview?: boolean;
   onOpen: (roomId: string, eventId: string) => void;
   legacyUsernameColor?: boolean;
   hour24Clock: boolean;
@@ -68,7 +68,6 @@ export function SearchResultGroup({
   highlights,
   items,
   mediaAutoLoad,
-  urlPreview,
   onOpen,
   legacyUsernameColor,
   hour24Clock,
@@ -76,6 +75,7 @@ export function SearchResultGroup({
 }: SearchResultGroupProps) {
   const mx = useMatrixClient();
   const useAuthentication = useMediaAuthentication();
+  const urlPreview = useRoomUrlPreview(room);
   const highlightRegex = useMemo(() => makeHighlightRegex(highlights), [highlights]);
 
   const powerLevels = usePowerLevels(room);

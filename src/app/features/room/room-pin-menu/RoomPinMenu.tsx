@@ -63,6 +63,7 @@ import { RenderMatrixEvent, useMatrixEventRenderer } from '../../../hooks/useMat
 import { RenderMessageContent } from '../../../components/RenderMessageContent';
 import { useSetting } from '../../../state/hooks/settings';
 import { settingsAtom } from '../../../state/settings';
+import { useRoomUrlPreview } from '../../../hooks/useRoomUrlPreview';
 import * as customHtmlCss from '../../../styles/CustomHtml.css';
 import { EncryptedContent } from '../message';
 import { Image } from '../../../components/media';
@@ -272,7 +273,7 @@ export const RoomPinMenu = forwardRef<HTMLDivElement, RoomPinMenuProps>(
     const sortedPinnedEvent = useMemo(() => Array.from(pinnedEvents).reverse(), [pinnedEvents]);
     const useAuthentication = useMediaAuthentication();
     const [mediaAutoLoad] = useSetting(settingsAtom, 'mediaAutoLoad');
-    const [urlPreview] = useSetting(settingsAtom, 'urlPreview');
+    const urlPreview = useRoomUrlPreview(room);
 
     const direct = useIsDirectRoom();
     const [legacyUsernameColor] = useSetting(settingsAtom, 'legacyUsernameColor');

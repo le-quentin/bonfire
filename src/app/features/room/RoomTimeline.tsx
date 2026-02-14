@@ -86,6 +86,7 @@ import {
 import { useSetting } from '../../state/hooks/settings';
 import { MessageLayout, settingsAtom } from '../../state/settings';
 import { useMatrixEventRenderer } from '../../hooks/useMatrixEventRenderer';
+import { useRoomUrlPreview } from '../../hooks/useRoomUrlPreview';
 import { Reactions, Message, Event, EncryptedContent } from './message';
 import { useMemberEventParser } from '../../hooks/useMemberEventParser';
 import * as customHtmlCss from '../../styles/CustomHtml.css';
@@ -441,9 +442,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
   const [hideMembershipEvents] = useSetting(settingsAtom, 'hideMembershipEvents');
   const [hideNickAvatarEvents] = useSetting(settingsAtom, 'hideNickAvatarEvents');
   const [mediaAutoLoad] = useSetting(settingsAtom, 'mediaAutoLoad');
-  const [urlPreview] = useSetting(settingsAtom, 'urlPreview');
-  const [encUrlPreview] = useSetting(settingsAtom, 'encUrlPreview');
-  const showUrlPreview = room.hasEncryptionStateEvent() ? encUrlPreview : urlPreview;
+  const showUrlPreview = useRoomUrlPreview(room);
   const [showHiddenEvents] = useSetting(settingsAtom, 'showHiddenEvents');
   const [showDeveloperTools] = useSetting(settingsAtom, 'developerTools');
 

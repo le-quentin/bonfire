@@ -893,8 +893,10 @@ function Messages() {
     'hideNickAvatarEvents'
   );
   const [mediaAutoLoad, setMediaAutoLoad] = useSetting(settingsAtom, 'mediaAutoLoad');
-  const [urlPreview, setUrlPreview] = useSetting(settingsAtom, 'urlPreview');
-  const [encUrlPreview, setEncUrlPreview] = useSetting(settingsAtom, 'encUrlPreview');
+  const [encryptedDmUrlPreview, setEncryptedDmUrlPreview] = useSetting(
+    settingsAtom,
+    'encryptedDmUrlPreview'
+  );
   const [showHiddenEvents, setShowHiddenEvents] = useSetting(settingsAtom, 'showHiddenEvents');
 
   return (
@@ -956,14 +958,15 @@ function Messages() {
       </SequenceCard>
       <SequenceCard className={SequenceCardStyle} variant="SurfaceVariant" direction="Column">
         <SettingTile
-          title="Url Preview"
-          after={<Switch variant="Primary" value={urlPreview} onChange={setUrlPreview} />}
-        />
-      </SequenceCard>
-      <SequenceCard className={SequenceCardStyle} variant="SurfaceVariant" direction="Column">
-        <SettingTile
-          title="Url Preview in Encrypted Room"
-          after={<Switch variant="Primary" value={encUrlPreview} onChange={setEncUrlPreview} />}
+          title="URL Preview in Encrypted Direct Messages"
+          description="Show link previews in encrypted DMs. URLs are sent to your homeserver for preview generation."
+          after={
+            <Switch
+              variant="Primary"
+              value={encryptedDmUrlPreview}
+              onChange={setEncryptedDmUrlPreview}
+            />
+          }
         />
       </SequenceCard>
       <SequenceCard className={SequenceCardStyle} variant="SurfaceVariant" direction="Column">

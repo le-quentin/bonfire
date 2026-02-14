@@ -29,8 +29,7 @@ export interface Settings {
   hideMembershipEvents: boolean;
   hideNickAvatarEvents: boolean;
   mediaAutoLoad: boolean;
-  urlPreview: boolean;
-  encUrlPreview: boolean;
+  encryptedDmUrlPreview: boolean;
   showHiddenEvents: boolean;
   legacyUsernameColor: boolean;
 
@@ -63,8 +62,7 @@ const defaultSettings: Settings = {
   hideMembershipEvents: false,
   hideNickAvatarEvents: true,
   mediaAutoLoad: true,
-  urlPreview: true,
-  encUrlPreview: false,
+  encryptedDmUrlPreview: false,
   showHiddenEvents: false,
   legacyUsernameColor: false,
 

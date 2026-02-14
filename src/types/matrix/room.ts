@@ -38,6 +38,7 @@ export enum StateEvent {
 
   PoniesRoomEmotes = 'im.ponies.room_emotes',
   PowerLevelTags = 'in.cinny.room.power_level_tags',
+  BonfireUrlPreviewEnabled = 'in.bonfire.url_preview_enabled',
 }
 
 export enum MessageEvent {
@@ -56,6 +57,10 @@ export type MSpaceChildContent = {
   via: string[];
   suggested?: boolean;
   order?: string;
+};
+
+export type BonfireUrlPreviewEnabledContent = {
+  enabled: boolean;
 };
 
 export enum NotificationType {

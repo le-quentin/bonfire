@@ -19,4 +19,4 @@ We won't change anything about the tech stack unless we 100% need to.
 
 ## About me
 
-I'm a seasoned software engineed, who's more experienced in the backend. I know how to code, I know many things. While not a Typescript expert, I used it a lot. However, I've never used React before. So while making changes, feel free to explain why you're making them and how they interact with the react framework. Seize opportunities to teach me a little about React concepts along the way.
+I'm a seasoned software engineed, who's more experienced in the backend. I know how to code, I know many things. While not a Typescript expert, I used it a lot. However, I've never used React before. So while making changes, feel free to explain why you're making them and how they interact with the react framework. Seize opportunities to teach me a little about React concepts along the way. In a similar fashion, I have zero knowledge about the Matrix standard, so teach me about it along the way.

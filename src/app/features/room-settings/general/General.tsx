@@ -15,6 +15,7 @@ import {
 } from '../../common-settings/general';
 import { useRoomCreators } from '../../../hooks/useRoomCreators';
 import { useRoomPermissions } from '../../../hooks/useRoomPermissions';
+import { RoomUrlPreview } from './RoomUrlPreview';
 
 type GeneralProps = {
   requestClose: () => void;
@@ -46,6 +47,7 @@ export function General({ requestClose }: GeneralProps) {
           <PageContent>
             <Box direction="Column" gap="700">
               <RoomProfile permissions={permissions} />
+              <RoomUrlPreview permissions={permissions} />
               <Box direction="Column" gap="100">
                 <Text size="L400">Options</Text>
                 <RoomJoinRules permissions={permissions} />
