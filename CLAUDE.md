@@ -7,11 +7,11 @@ IMPORTANT: **this is a PoC, the simplest implementation will always be the best 
 ## The features
 
 This product will be feature complete enough when it has the following:
-- Discord look&feel (as close as possible)
-- Persistent voice channels: just like in Discord, voice chanels are always open, you can join them anytime, even on your own, and other people can see you're in there from the side pannel. From these channels, just the mic is open by default, but you can also open your cam or share your screen etc.
-- Custom emojis (at least handled by a space, not necessary user by user)
-- Links embed integrations: at least for Youtube and X.com, show an embed with video description and thumbnail, or the content of the tweet for X.
-- Gifs: possibility to copy paste a gif from the web, and ideally a gif search function akin to the Discord one
+- [ ] Discord look&feel (as close as possible)
+- [ ] Persistent voice channels: just like in Discord, voice chanels are always open, you can join them anytime, even on your own, and other people can see you're in there from the side pannel. From these channels, just the mic is open by default, but you can also open your cam or share your screen etc.
+- [ ] Custom emojis (at least handled by a space, not necessary user by user)
+- [x] Links embed integrations: at least for Youtube and X.com, show an embed with video description and thumbnail, or the content of the tweet for X. => actually Cinny already had the feature, it was just locked behind a user setting. We moved the setting to be space/room scoped, more in the Discord spirit
+- [ ] Gifs: possibility to copy paste a gif from the web, and ideally a gif search function akin to the Discord one
 
 ## Technically speaking
 
