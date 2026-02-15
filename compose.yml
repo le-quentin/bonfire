@@ -1,0 +1,29 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    depends_on:
+      - api
+    networks:
+      - bonfire
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - KLIPY_API_KEY=${KLIPY_API_KEY}
+      - PORT=3001
+    networks:
+      - bonfire
+
+networks:
+  bonfire:
+    driver: bridge
