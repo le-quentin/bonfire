@@ -84,8 +84,15 @@ export const MessageBase = recipe({
     DefaultReset,
     {
       marginTop: SpacingVar,
-      padding: `${config.space.S100} ${config.space.S200} ${config.space.S100} ${config.space.S400}`,
-      borderRadius: `0 ${config.radii.R400} ${config.radii.R400} 0`,
+      padding: `${toRem(2)} ${toRem(48)} ${toRem(2)} ${toRem(16)}`,
+      borderRadius: 0,
+      transition: 'background-color 50ms ease-out',
+
+      selectors: {
+        '&:hover': {
+          backgroundColor: color.Surface.ContainerHover,
+        },
+      },
     },
   ],
   variants: {
@@ -99,10 +106,14 @@ export const MessageBase = recipe({
       true: AutoCollapse,
     },
     highlight: HighlightVariant,
-    selected: SelectedVariant,
+    selected: {
+      true: {
+        backgroundColor: color.Surface.ContainerActive,
+      },
+    },
   },
   defaultVariants: {
-    space: '400',
+    space: '100',
   },
 });
 
@@ -176,7 +187,8 @@ export const Username = style({
 });
 
 export const UsernameBold = style({
-  fontWeight: 550,
+  fontWeight: 600,
+  color: '#ffffff',
 });
 
 export const MessageTextBody = recipe({

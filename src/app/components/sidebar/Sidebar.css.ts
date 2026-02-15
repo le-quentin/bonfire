@@ -6,9 +6,8 @@ import { ContainerColor } from '../../styles/ContainerColor.css';
 export const Sidebar = style([
   DefaultReset,
   {
-    width: toRem(66),
+    width: toRem(72),
     backgroundColor: color.Background.Container,
-    borderRight: `${config.borderWidth.B300} solid ${color.Background.ContainerLine}`,
 
     display: 'flex',
     flexDirection: 'column',
@@ -63,12 +62,12 @@ export const DropTarget = style({
   },
 });
 
-const PUSH_X = 2;
+const PUSH_X = 0;
 export const SidebarItem = recipe({
   base: [
     DefaultReset,
     {
-      minWidth: toRem(42),
+      minWidth: toRem(48),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -76,23 +75,20 @@ export const SidebarItem = recipe({
       transition: 'transform 200ms cubic-bezier(0, 0.8, 0.67, 0.97)',
 
       selectors: {
-        '&:hover': {
-          transform: `translateX(${toRem(PUSH_X)})`,
-        },
         '&::before': {
           content: '',
           display: 'none',
           position: 'absolute',
-          left: toRem(-11.5 - PUSH_X),
-          width: toRem(3 + PUSH_X),
-          height: toRem(16),
+          left: toRem(0),
+          width: toRem(4),
+          height: toRem(8),
           borderRadius: `0 ${toRem(4)} ${toRem(4)} 0`,
-          background: 'CurrentColor',
-          transition: 'height 200ms linear',
+          background: '#ffffff',
+          transition: 'height 200ms ease-out',
         },
         '&:hover::before': {
           display: 'block',
-          width: toRem(3),
+          height: toRem(20),
         },
       },
     },
@@ -105,10 +101,7 @@ export const SidebarItem = recipe({
         selectors: {
           '&::before': {
             display: 'block',
-            height: toRem(24),
-          },
-          '&:hover::before': {
-            width: toRem(3 + PUSH_X),
+            height: toRem(40),
           },
         },
       },

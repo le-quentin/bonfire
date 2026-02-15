@@ -246,7 +246,7 @@ export function MembersDrawer({ room, members }: MembersDrawerProps) {
 
   return (
     <Box
-      className={classNames(css.MembersDrawer, ContainerColor({ variant: 'Background' }))}
+      className={classNames(css.MembersDrawer, ContainerColor({ variant: 'Surface' }))}
       shrink="No"
       direction="Column"
     >

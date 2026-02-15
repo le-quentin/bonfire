@@ -6,34 +6,35 @@
 }
 
 :root {
-  --tc-link: hsl(213deg 100% 45%);
+  --tc-link: #0068e0;
 
   /* user mxid colors */
-  --mx-uc-1: hsl(208, 100%, 45%);
-  --mx-uc-2: hsl(302, 100%, 30%);
-  --mx-uc-3: hsl(163, 100%, 30%);
-  --mx-uc-4: hsl(343, 100%, 45%);
-  --mx-uc-5: hsl(24, 100%, 45%);
-  --mx-uc-6: hsl(181, 100%, 30%);
-  --mx-uc-7: hsl(242, 100%, 45%);
-  --mx-uc-8: hsl(94, 100%, 35%);
+  --mx-uc-1: #5865f2;
+  --mx-uc-2: #eb459e;
+  --mx-uc-3: #1abc9c;
+  --mx-uc-4: #ed4245;
+  --mx-uc-5: #f26522;
+  --mx-uc-6: #1abc9c;
+  --mx-uc-7: #5865f2;
+  --mx-uc-8: #57f287;
 
   --font-emoji: 'Twemoji_DISABLED';
   --font-secondary: 'InterVariable', var(--font-emoji), sans-serif;
 }
 
+.ash-theme,
 .dark-theme,
 .butter-theme {
-  --tc-link: hsl(213deg 100% 80%);
+  --tc-link: #00b0f4;
 
-  --mx-uc-1: hsl(208, 100%, 75%);
-  --mx-uc-2: hsl(301, 100%, 80%);
-  --mx-uc-3: hsl(163, 100%, 70%);
-  --mx-uc-4: hsl(343, 100%, 75%);
-  --mx-uc-5: hsl(24, 100%, 70%);
-  --mx-uc-6: hsl(181, 100%, 60%);
-  --mx-uc-7: hsl(243, 100%, 80%);
-  --mx-uc-8: hsl(94, 100%, 80%);
+  --mx-uc-1: #5865f2;
+  --mx-uc-2: #eb459e;
+  --mx-uc-3: #1abc9c;
+  --mx-uc-4: #ed4245;
+  --mx-uc-5: #f26522;
+  --mx-uc-6: #1abc9c;
+  --mx-uc-7: #5865f2;
+  --mx-uc-8: #57f287;
 
   --font-secondary: 'InterVariable', var(--font-emoji), sans-serif;
 }

@@ -49,23 +49,30 @@ const NavItemBase = style({
   display: 'flex',
   justifyContent: 'start',
   cursor: 'pointer',
-  backgroundColor: Container,
-  color: OnContainer,
+  backgroundColor: 'transparent',
+  color: '#949ba4',
   outline: 'none',
-  minHeight: toRem(36),
+  minHeight: toRem(34),
+  borderRadius: toRem(4),
+  margin: `${toRem(1)} ${toRem(8)}`,
+  padding: `${toRem(1)} ${toRem(8)}`,
 
   selectors: {
     '&:hover, &:focus-visible': {
-      backgroundColor: ContainerHover,
+      backgroundColor: '#35373c',
+      color: '#dbdee1',
     },
     '&[data-hover=true]': {
-      backgroundColor: ContainerHover,
+      backgroundColor: '#35373c',
+      color: '#dbdee1',
     },
     [`&:has(.${NavLink}:active)`]: {
-      backgroundColor: ContainerActive,
+      backgroundColor: '#404249',
+      color: '#f2f3f5',
     },
     '&[aria-selected=true]': {
-      backgroundColor: ContainerActive,
+      backgroundColor: '#404249',
+      color: '#f2f3f5',
     },
     [`&:has(.${NavLink}:focus-visible)`]: {
       outline: `${config.borderWidth.B600} solid ${ContainerLine}`,
@@ -104,14 +111,15 @@ export const NavItem = recipe({
 
 export type RoomSelectorVariants = RecipeVariants<typeof NavItem>;
 export const NavItemContent = style({
-  paddingLeft: config.space.S200,
-  paddingRight: config.space.S300,
+  paddingLeft: config.space.S100,
+  paddingRight: config.space.S200,
   height: 'inherit',
   minWidth: 0,
   flexGrow: 1,
   display: 'flex',
   alignItems: 'center',
   fontWeight: config.fontWeight.W500,
+  fontSize: toRem(16),
 
   selectors: {
     '&:hover': {
@@ -119,6 +127,7 @@ export const NavItemContent = style({
     },
     [`.${NavItemBase}[data-highlight=true] &`]: {
       fontWeight: config.fontWeight.W600,
+      color: '#ffffff',
     },
   },
 });
