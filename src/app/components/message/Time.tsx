@@ -37,7 +37,7 @@ export const Time = as<'span', TimeProps & ComponentProps<typeof Text>>(
     }
 
     return (
-      <Text as="time" style={{ flexShrink: 0 }} size="T200" priority="300" {...props} ref={ref}>
+      <Text as="time" style={{ flexShrink: 0, fontSize: '0.72rem', color: '#949ba4', fontWeight: 500, position: 'relative', top: '-1px' }} size="T200" {...props} ref={ref}>
         {time}
       </Text>
     );
