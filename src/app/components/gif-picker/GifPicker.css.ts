@@ -2,24 +2,10 @@ import { style } from '@vanilla-extract/css';
 import { color, config } from 'folds';
 
 export const GifPickerContainer = style({
-  width: '550px',
-  height: '500px',
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: color.Surface.Container,
-  borderRadius: config.radii.R400,
+  flex: 1,
   overflow: 'hidden',
-});
-
-export const SearchBox = style({
-  padding: config.space.S400,
-  borderBottom: `1px solid ${color.Surface.ContainerLine}`,
-});
-
-export const SearchInput = style({
-  width: '100%',
-  fontSize: '16px',
-  padding: `${config.space.S300} ${config.space.S400}`,
 });
 
 export const GifGrid = style({

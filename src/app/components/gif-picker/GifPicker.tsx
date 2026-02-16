@@ -19,12 +19,12 @@ type GifResult = {
 type GifPickerProps = {
   onGifSelect: (url: string) => void;
   requestClose: () => void;
+  searchQuery?: string;
 };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-export function GifPicker({ onGifSelect, requestClose }: GifPickerProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+export function GifPicker({ onGifSelect, requestClose, searchQuery = '' }: GifPickerProps) {
   const [gifs, setGifs] = useState<GifResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,19 +59,11 @@ export function GifPicker({ onGifSelect, requestClose }: GifPickerProps) {
   }, []);
 
   useEffect(() => {
-    fetchGifs('');
-  }, [fetchGifs]);
+    const timeoutId = setTimeout(() => {
+      fetchGifs(searchQuery);
+    }, searchQuery ? 500 : 0);
 
-  useEffect(() => {
-    if (searchQuery) {
-      const timeoutId = setTimeout(() => {
-        fetchGifs(searchQuery);
-      }, 500);
-
-      return () => clearTimeout(timeoutId);
-    } else {
-      fetchGifs('');
-    }
+    return () => clearTimeout(timeoutId);
   }, [searchQuery, fetchGifs]);
 
   const handleGifClick = (gif: GifResult) => {
@@ -88,19 +80,6 @@ export function GifPicker({ onGifSelect, requestClose }: GifPickerProps) {
 
   return (
     <Box className={css.GifPickerContainer} direction="Column">
-      <Box className={css.SearchBox} shrink="No">
-        <Input
-          className={css.SearchInput}
-          variant="Background"
-          size="600"
-          radii="400"
-          placeholder="Search for GIFs..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          autoFocus
-        />
-      </Box>
-
       <Scroll className={css.GifGrid} hideTrack visibility="Hover">
         {loading && (
           <Box className={css.LoadingContainer} alignItems="Center" justifyContent="Center">

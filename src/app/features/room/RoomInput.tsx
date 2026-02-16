@@ -56,7 +56,7 @@ import {
 } from '../../components/editor';
 import { EmojiBoard, EmojiBoardTab } from '../../components/emoji-board';
 import { UseStateProvider } from '../../components/UseStateProvider';
-import { GifPicker } from '../../components/gif-picker';
+import { GifIcon } from '../../components/GifIcon';
 import {
   TUploadContent,
   encryptFile,
@@ -136,7 +136,6 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
     const direct = useIsDirectRoom();
     const commands = useCommands(mx, room);
     const emojiBtnRef = useRef<HTMLButtonElement>(null);
-    const gifBtnRef = useRef<HTMLButtonElement>(null);
     const roomToParents = useAtomValue(roomToParentsAtom);
     const powerLevels = usePowerLevelsContext();
     const creators = useRoomCreators(room);
@@ -163,6 +162,8 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       legacyUsernameColor || direct ? colorMXID(replyUserID ?? '') : replyPowerColor;
 
     const [uploadBoard, setUploadBoard] = useState(true);
+    const [gifError, setGifError] = useState<string | null>(null);
+    const gifErrorTimeoutRef = useRef<number>();
     const [selectedFiles, setSelectedFiles] = useAtom(roomIdToUploadItemsAtomFamily(roomId));
     const uploadFamilyObserverAtom = createUploadFamilyObserverAtom(
       roomUploadAtomFamily,
@@ -448,6 +449,76 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
       });
     };
 
+    const setGifErrorWithTimeout = useCallback((error: string) => {
+      if (gifErrorTimeoutRef.current) {
+        clearTimeout(gifErrorTimeoutRef.current);
+      }
+      setGifError(error);
+      gifErrorTimeoutRef.current = window.setTimeout(() => {
+        setGifError(null);
+      }, 8000);
+    }, []);
+
+    useEffect(() => {
+      return () => {
+        if (gifErrorTimeoutRef.current) {
+          clearTimeout(gifErrorTimeoutRef.current);
+        }
+      };
+    }, []);
+
+    const handleGifSelect = async (url: string) => {
+      setGifError(null);
+      if (gifErrorTimeoutRef.current) {
+        clearTimeout(gifErrorTimeoutRef.current);
+      }
+      try {
+        const blob = await getImageUrlBlob(url);
+        const filename = url.split('/').pop()?.split('?')[0] || 'gif.gif';
+        const file = new File([blob], filename, { type: blob.type });
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+          setGifErrorWithTimeout(
+            `GIF too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Matrix servers limit file sizes based on your plan. Try a smaller GIF.`
+          );
+          return;
+        }
+
+        const safeGif = safeFile(file);
+
+        let uploadFile = safeGif;
+        let encInfo;
+
+        if (room.hasEncryptionStateEvent()) {
+          const encrypted = await encryptFile(safeGif);
+          uploadFile = encrypted.file;
+          encInfo = encrypted.encInfo;
+        }
+
+        const upload = await mx.uploadContent(uploadFile);
+        const mxc = upload?.content_uri;
+
+        if (!mxc) throw new Error('Failed to upload GIF');
+
+        const uploadItem: TUploadItem = {
+          file: uploadFile,
+          originalFile: safeGif,
+          encInfo,
+          metadata: { markedAsSpoiler: false },
+        };
+
+        const content = await getImageMsgContent(mx, uploadItem, mxc);
+        mx.sendMessage(roomId, content as any);
+      } catch (error: any) {
+        if (error?.errcode === 'M_TOO_LARGE') {
+          setGifErrorWithTimeout('GIF too large for your Matrix server. Try a smaller one or upgrade your plan.');
+        } else {
+          setGifErrorWithTimeout(`Failed to send GIF: ${error.message || 'Unknown error'}`);
+        }
+      }
+    };
+
     return (
       <div ref={ref}>
         {selectedFiles.length > 0 && (
@@ -538,6 +609,38 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
             requestClose={handleCloseAutocomplete}
           />
         )}
+        {gifError && (
+          <Box
+            style={{
+              padding: `${config.space.S300} ${config.space.S400}`,
+              backgroundColor: 'rgb(220, 38, 38)',
+              borderRadius: config.radii.R400,
+              marginBottom: config.space.S300,
+              boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+            }}
+            alignItems="Center"
+            gap="300"
+          >
+            <Icon size="200" src={Icons.Warning} fill="white" />
+            <Text size="T400" grow="Yes" style={{ color: 'white', fontWeight: 500 }}>
+              {gifError}
+            </Text>
+            <IconButton
+              size="300"
+              radii="300"
+              onClick={() => {
+                setGifError(null);
+                if (gifErrorTimeoutRef.current) {
+                  clearTimeout(gifErrorTimeoutRef.current);
+                }
+              }}
+              aria-label="Dismiss error"
+              style={{ color: 'white' }}
+            >
+              <Icon size="100" src={Icons.Cross} />
+            </IconButton>
+          </Box>
+        )}
         <CustomEditor
           editableName="RoomInput"
           editor={editor}
@@ -625,6 +728,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
                         onEmojiSelect={handleEmoticonSelect}
                         onCustomEmojiSelect={handleEmoticonSelect}
                         onStickerSelect={handleStickerSelect}
+                        onGifSelect={handleGifSelect}
                         requestClose={() => {
                           setEmojiBoardTab((t) => {
                             if (t) {
@@ -637,6 +741,15 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
                       />
                     }
                   >
+                    <IconButton
+                      aria-pressed={emojiBoardTab === EmojiBoardTab.Gif}
+                      onClick={() => setEmojiBoardTab(EmojiBoardTab.Gif)}
+                      variant="SurfaceVariant"
+                      size="300"
+                      radii="300"
+                    >
+                      <GifIcon filled={emojiBoardTab === EmojiBoardTab.Gif} />
+                    </IconButton>
                     {!hideStickerBtn && (
                       <IconButton
                         aria-pressed={emojiBoardTab === EmojiBoardTab.Sticker}
@@ -667,85 +780,6 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
                           hideStickerBtn ? !!emojiBoardTab : emojiBoardTab === EmojiBoardTab.Emoji
                         }
                       />
-                    </IconButton>
-                  </PopOut>
-                )}
-              </UseStateProvider>
-              <UseStateProvider initial={false}>
-                {(gifPickerOpen: boolean, setGifPickerOpen) => (
-                  <PopOut
-                    offset={16}
-                    alignOffset={-44}
-                    position="Top"
-                    align="End"
-                    anchor={
-                      gifPickerOpen ? gifBtnRef.current?.getBoundingClientRect() : undefined
-                    }
-                    content={
-                      <GifPicker
-                        onGifSelect={async (url) => {
-                          setGifPickerOpen(false);
-
-                          try {
-                            const blob = await getImageUrlBlob(url);
-                            const filename = url.split('/').pop()?.split('?')[0] || 'gif.gif';
-                            const file = new File([blob], filename, { type: blob.type });
-
-                            // Check file size (Matrix servers typically limit to 50-100MB, but let's be conservative)
-                            const maxSize = 10 * 1024 * 1024; // 10MB
-                            if (file.size > maxSize) {
-                              console.warn(
-                                `GIF too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Skipping.`
-                              );
-                              return;
-                            }
-
-                            const safeGif = safeFile(file);
-
-                            let uploadFile = safeGif;
-                            let encInfo;
-
-                            if (room.hasEncryptionStateEvent()) {
-                              const encrypted = await encryptFile(safeGif);
-                              uploadFile = encrypted.file;
-                              encInfo = encrypted.encInfo;
-                            }
-
-                            const upload = await mx.uploadContent(uploadFile);
-                            const mxc = upload?.content_uri;
-
-                            if (!mxc) throw new Error('Failed to upload GIF');
-
-                            const uploadItem: TUploadItem = {
-                              file: uploadFile,
-                              originalFile: safeGif,
-                              encInfo,
-                              metadata: { markedAsSpoiler: false },
-                            };
-
-                            const content = await getImageMsgContent(mx, uploadItem, mxc);
-                            mx.sendMessage(roomId, content as any);
-                          } catch (error: any) {
-                            if (error?.errcode === 'M_TOO_LARGE') {
-                              console.warn('GIF too large for server. Try a smaller one.');
-                            } else {
-                              console.error('Failed to send GIF:', error);
-                            }
-                          }
-                        }}
-                        requestClose={() => setGifPickerOpen(false)}
-                      />
-                    }
-                  >
-                    <IconButton
-                      ref={gifBtnRef}
-                      aria-pressed={gifPickerOpen}
-                      onClick={() => setGifPickerOpen(!gifPickerOpen)}
-                      variant="SurfaceVariant"
-                      size="300"
-                      radii="300"
-                    >
-                      <Icon src={Icons.Search} filled={gifPickerOpen} />
                     </IconButton>
                   </PopOut>
                 )}
