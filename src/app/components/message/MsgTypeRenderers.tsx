@@ -195,13 +195,25 @@ export function MImage({ content, renderImageContent, outlined }: MImageProps) {
   if (typeof mxcUrl !== 'string') {
     return <BrokenContent />;
   }
-  const height = scaleYDimension(imgInfo?.w || 400, 400, imgInfo?.h || 400);
+  const originalWidth = imgInfo?.w || 400;
+  const originalHeight = imgInfo?.h || 400;
+  const maxWidth = 400;
+  const maxHeight = 300;
+
+  let width = maxWidth;
+  let height = scaleYDimension(originalWidth, maxWidth, originalHeight);
+
+  if (height > maxHeight) {
+    height = maxHeight;
+    width = scaleYDimension(originalHeight, maxHeight, originalWidth);
+  }
 
   return (
-    <Attachment outlined={outlined}>
+    <Attachment outlined={outlined} style={{ width: toRem(width) }}>
       <AttachmentBox
         style={{
           height: toRem(height < 48 ? 48 : height),
+          width: toRem(width),
         }}
       >
         {renderImageContent({
